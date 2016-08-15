@@ -14,7 +14,7 @@ import subprocess as sp
 import shlex
 from ConfigParser import ConfigParser
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 __commit__ = None
 
 # constants
@@ -716,7 +716,6 @@ def main(argv=None):
     if args.query:
         helpers = cfg.get('global', 'helpers').split(',')
         helpers = [h.strip() for h in helpers]
-        # helpers = ['mutt_alias', 'osx_abook', 'sent']
 
         results = []
         query = args.query[0]
@@ -726,29 +725,20 @@ def main(argv=None):
                 aliasDat = aliasData(cfg)
                 aliasDat.searchData(query)
                 data = aliasDat.results
-                # data.insert(0,( 'alias','---','---' ))
             elif helper in ['osx_abook', 'goobook', ]:
                 extSource = extCommandData(cfg, helper)
                 extSource.searchData(query)
                 data = extSource.results
-                # data.insert(0,( 'osx','---','---' ))
-                # data = searchExtCommand(cfg, helper, query)
             elif helper == 'sent':
                 sortby = cfg.get('sent', 'sortby')
                 if args.sortby:
                     sortby = args.sortby[0]
                 sentSource.searchData(query, sortby)
                 data = sentSource.results
-                # data.insert(0,( 'sent','---','---' ))
             else:
-                # this is potentially risky, but we'll try to parse any other
-                # helpers in the config file as external commands
-                try:
-                    extSource = extCommandData(cfg, helper)
-                    extSource.searchData(query)
-                    data = extSource.results
-                except:
-                    pass
+                print "unknown helper '{0}'".format(helper)
+                return 10
+
             results.extend(data)
 
         printResults(results)
