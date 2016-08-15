@@ -29,7 +29,7 @@ test:
 	echo ${mandir}
 
 gtag:
-	git tag -am "muttqt $(VERSIONNUM)" $(VERSIONNUM)
+	git tag -sam "muttqt $(VERSIONNUM)" $(VERSIONNUM)
 
 # make bin/
 $(binsubdir):
